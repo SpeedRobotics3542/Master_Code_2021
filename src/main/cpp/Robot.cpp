@@ -14,8 +14,6 @@
 
 #include "Shooter.h"
 
-
-
 #include <frc/smartdashboard/SmartDashboard.h>
 
 void Robot::RobotInit()

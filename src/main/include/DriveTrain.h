@@ -42,6 +42,24 @@ public:
      LeftDrive.Set(ControlMode::PercentOutput, LeftJoystick * Power);
 
  };
+
+// Function name: aim
+// inputs: power (PID) turning right is positive!
+// Function actions: turns robot by giving opposite power to each side of the robot.
+// return values: boolean for completion
+
+bool Aim(double Power = 0)
+{
+
+    //Set motor power to turn
+    RightDrive.Set(ControlMode::PercentOutput, -Power);
+    LeftDrive.Set(ControlMode::PercentOutput, Power);
+    
+    return 1;
+
+}
+
+
 };
 
 
