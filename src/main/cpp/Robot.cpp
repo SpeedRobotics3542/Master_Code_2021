@@ -76,7 +76,7 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
 
-  Chassis->Drive(Driver.GetY(frc::XboxController::kLeftHand)*-1, Driver.GetY(frc::XboxController::kRightHand), .65);
+  Chassis->Drive(Driver.GetY(frc::XboxController::kLeftHand), Driver.GetY(frc::XboxController::kRightHand), .65);
   
   if (Manipulator.GetBumper(frc::XboxController::kRightHand)==1)
   {
