@@ -32,6 +32,16 @@ public:
     RightDrive.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor,0,10);
     LeftDrive.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor,0,10);
 
+    //ramp rates
+    RightDrive.ConfigClosedloopRamp(.125);
+    LeftDrive.ConfigClosedloopRamp(.125);
+    RightDrive.ConfigOpenloopRamp(.125);
+    LeftDrive.ConfigOpenloopRamp(.125);
+
+    //current limits
+    RightDrive.ConfigSupplyCurrentLimit(SupplyCurrentLimitConfiguration(true, 40, 35, 20));
+    LeftDrive.ConfigSupplyCurrentLimit(SupplyCurrentLimitConfiguration(true, 40, 35, 20));
+
     //Inverts Drive
     RightDrive.SetInverted(false);
     RightDrive2.SetInverted(InvertType::FollowMaster);
