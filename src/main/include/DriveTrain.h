@@ -59,7 +59,7 @@ bool Aim(double Power = 0)
     //Set motor power to turn
     RightDrive.Set(ControlMode::PercentOutput, -Power);
     LeftDrive.Set(ControlMode::PercentOutput, Power);
-    
+     
     return 1;
 
 }
