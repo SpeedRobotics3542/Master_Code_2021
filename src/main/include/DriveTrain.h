@@ -18,6 +18,11 @@ public:
  DriveTrain()
 
  {
+    //set all motors to factory defaults, for portability.
+    RightDrive.ConfigFactoryDefault();
+    RightDrive2.ConfigFactoryDefault();
+    LeftDrive.ConfigFactoryDefault();
+    LeftDrive2.ConfigFactoryDefault();
     
     //Follower code
     RightDrive2.Follow(RightDrive);
@@ -29,9 +34,9 @@ public:
 
     //Inverts Drive
     RightDrive.SetInverted(false);
-    RightDrive2.SetInverted(RightDrive.GetInverted());
-    LeftDrive.SetInverted(false);
-    LeftDrive2.SetInverted(LeftDrive.GetInverted());
+    RightDrive2.SetInverted(InvertType::FollowMaster);
+    LeftDrive.SetInverted(true);
+    LeftDrive2.SetInverted(InvertType::FollowMaster);
 };
 
 
@@ -61,7 +66,6 @@ bool Aim(double Power = 0)
 
 
 };
-
 
 
 #endif
