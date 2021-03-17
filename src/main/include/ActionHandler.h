@@ -6,7 +6,7 @@
 #include "Indexer.h"
 #include "Intake.h"
 #include "Limelight.h"
-
+#include "frc/controller/PIDController.h"
 
 
 class Handler
@@ -19,7 +19,15 @@ class Handler
         Index *Indexer;
         LimeLight *Limelight;
 
+        //PID controller and variables for PID
+        double P = .01;
+        double I = 0;
+        double D = 0;
+        
+        frc2::PIDController AimingPID{P, I, D};
+
     public:
+    
 
 Handler(DriveTrain* D, Intook* inny, Shooting* Shoot, Index* In, LimeLight* GreenLight)
 {
@@ -66,6 +74,55 @@ void IndexShooterMetering(int Rpm = 100, bool activated = true)
     }
 
 }
+
+// logic: assist in aiming
+// inputs: none
+// outputs: 1 if target is in range and valid 0 if target is not valid and or not in range
+
+
+// TOLERANCES ON PID!!! SET THEM!!!!!
+
+bool MasterAiming(int Pidgeon)
+{
+    //Target is valid and within set range
+    if (Limelight->targetValid and Limelight->targetOffsetAngle_Horizontal > 8 or Limelight->targetOffsetAngle_Horizontal < -8)
+    {
+        //Limelight angle of error = "Pidgeon"
+        Limelight->targetOffsetAngle_Horizontal = Pidgeon;  
+
+        //Aiming PID is not where you want      
+        while (!AimingPID.AtSetpoint())
+        {
+
+            //Move toward target
+            Chassis->Aim(35);
+
+            //Check to see if it is in range again
+            if(AimingPID.AtSetpoint())
+            {
+                //Return 1 if true
+                return 1;
+
+            } else {
+
+                !AimingPID.AtSetpoint();
+
+            }
+
+        }
+
+    } else {
+
+        return 0;
+
+    }
+
+}
+
+//while(***conditional***)
+//{***True Statement***}
+
+
 
 };
 
