@@ -80,14 +80,69 @@ void Robot::TeleopPeriodic() {
 
   Chassis->Drive(Driver.GetY(frc::XboxController::kLeftHand)*-1, Driver.GetY(frc::XboxController::kRightHand), .65);
   
+  //Intake run on right bumper on manipulator 
   if (Manipulator.GetBumper(frc::XboxController::kRightHand)==1)
   {
+
     Intake->IntakeRun(25);
-  } 
-  else 
-  {
+
+  } else {
+
     Intake->IntakeRun(0, false);
+
   }
+
+//Hopper run on A button on Manipulator
+  if (Manipulator.GetAButton()==1)
+  {
+
+    Indexer->HopperRun(40);
+
+  } else {
+    
+
+    Indexer->HopperRun(0);
+
+  }
+
+//Holding System run on B Button on Manipulator
+if (Manipulator.GetBButton()==1)
+{
+
+  Indexer->HoldingSystemRun(40);
+
+} else {
+
+  Indexer->HoldingSystemRun(0);
+
+}
+
+//Shooter run on Left bumper on Manipulator
+if (Manipulator.GetBumper(frc::XboxController::kLeftHand)==1)
+{
+
+  Shooter->SetVelocity(2300);
+
+} else {
+
+  Shooter->SetVelocity(0);
+
+}
+
+//Metering Wheel run on X button on Manipulator
+if(Manipulator.GetXButton()==1)
+{
+
+  Shooter->SetVelocity(0);
+  Shooter->MeteringWheelRun(50);
+
+} else {
+
+  Shooter->SetVelocity(0);
+  Shooter->MeteringWheelRun(0);
+  
+}
+
   
 }
 

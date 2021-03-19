@@ -80,8 +80,8 @@ class Shooting
     //input: RPM
     bool MeteringWheelRun(double MeteringWheelVelocity = 0)
     {
-        
-        //Velocity range for shooter to turn on Metering Wheel
+
+        //Velocity range for shooter to turn on Metering Wheel      
         if((ShooterVelocity * .95) <= Shooter1Encoder.GetVelocity() and 
             (ShooterVelocity * 1.05) >= Shooter1Encoder.GetVelocity())
         {

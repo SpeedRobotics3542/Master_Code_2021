@@ -26,13 +26,14 @@ class Handler
         double PIDTolerance = 2.5;
         
         frc2::PIDController AimingPID{P, I, D};
-        
+
+        PigeonIMU *Pigeon = new PigeonIMU (1);
 
     public:
     
 
 Handler(DriveTrain* D, Intook* inny, Shooting* Shoot, Index* In, LimeLight* GreenLight)
-{
+{ 
 
     Chassis = D;
     Intake = inny;
@@ -80,13 +81,8 @@ void IndexShooterMetering(int Rpm = 100, bool activated = true)
 
 }
 
-// logic: assist in aiming
-// inputs: none
-// outputs: 1 if target is in range and valid 0 if target is not valid and or not in range
 
-
-// TOLERANCES ON PID!!! SET THEM!!!!!
-
+//Connects Limelight, Drivetrain, and Pigeon to aim
 bool MasterAiming(int Pidgeon)
 {
     //Target is valid and within set range
@@ -121,8 +117,5 @@ bool MasterAiming(int Pidgeon)
 }
 
 };
-
-
-
 
 #endif
