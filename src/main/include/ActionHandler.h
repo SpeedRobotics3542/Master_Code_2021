@@ -23,8 +23,10 @@ class Handler
         double P = .01;
         double I = 0;
         double D = 0;
+        double PIDTolerance = 2.5;
         
         frc2::PIDController AimingPID{P, I, D};
+        
 
     public:
     
@@ -37,6 +39,9 @@ Handler(DriveTrain* D, Intook* inny, Shooting* Shoot, Index* In, LimeLight* Gree
     Shooter = Shoot;
     Indexer = In;
     Limelight = GreenLight;
+
+    //Setting Tolerance for Aiming
+    AimingPID.SetTolerance(PIDTolerance, 10);
 
 }
 
@@ -85,31 +90,27 @@ void IndexShooterMetering(int Rpm = 100, bool activated = true)
 bool MasterAiming(int Pidgeon)
 {
     //Target is valid and within set range
-    if (Limelight->targetValid and Limelight->targetOffsetAngle_Horizontal > 8 or Limelight->targetOffsetAngle_Horizontal < -8)
+    if (Limelight->targetValid and (Limelight->targetOffsetAngle_Horizontal > PIDTolerance or 
+                                    Limelight->targetOffsetAngle_Horizontal < -PIDTolerance))
     {
         //Limelight angle of error = "Pidgeon"
-        Limelight->targetOffsetAngle_Horizontal = Pidgeon;  
+        Pidgeon = Limelight->targetOffsetAngle_Horizontal;  
 
-        //Aiming PID is not where you want      
+        //Aiming PID is not where you want  
+        //Check setpoint and move robot    
         while (!AimingPID.AtSetpoint())
         {
 
+            //calculate PID output
+            double power = AimingPID.Calculate(Pidgeon, 0);
+
             //Move toward target
-            Chassis->Aim(35);
-
-            //Check to see if it is in range again
-            if(AimingPID.AtSetpoint())
-            {
-                //Return 1 if true
-                return 1;
-
-            } else {
-
-                !AimingPID.AtSetpoint();
-
-            }
+            Chassis->Aim(power);
 
         }
+
+        //Return 1 if at setpoint
+        return 1;
 
     } else {
 
@@ -118,11 +119,6 @@ bool MasterAiming(int Pidgeon)
     }
 
 }
-
-//while(***conditional***)
-//{***True Statement***}
-
-
 
 };
 
