@@ -46,6 +46,16 @@ Handler(DriveTrain* D, Intook* inny, Shooting* Shoot, Index* In, LimeLight* Gree
 
 }
 
+//function returns the angle from Pigeon
+double GetPigeonAngle()
+{
+
+    PigeonIMU::FusionStatus *stat = new PigeonIMU::FusionStatus();
+    Pigeon->GetFusedHeading(*stat);
+    return stat->heading;
+
+}
+
 void IntakeIndexer(bool activated)
 {
     if(activated == 1)
@@ -83,22 +93,24 @@ void IndexShooterMetering(int Rpm = 100, bool activated = true)
 
 
 //Connects Limelight, Drivetrain, and Pigeon to aim
-bool MasterAiming(int Pidgeon)
+bool MasterAiming()
 {
+    
+
     //Target is valid and within set range
     if (Limelight->targetValid and (Limelight->targetOffsetAngle_Horizontal > PIDTolerance or 
                                     Limelight->targetOffsetAngle_Horizontal < -PIDTolerance))
     {
-        //Limelight angle of error = "Pidgeon"
-        Pidgeon = Limelight->targetOffsetAngle_Horizontal;  
-
+        //Limelight angle of error = Pigeon 
+        Pigeon->SetFusedHeading(Limelight->targetOffsetAngle_Horizontal);
+        
         //Aiming PID is not where you want  
         //Check setpoint and move robot    
         while (!AimingPID.AtSetpoint())
         {
 
             //calculate PID output
-            double power = AimingPID.Calculate(Pidgeon, 0);
+            double power = AimingPID.Calculate(GetPigeonAngle(), 0);
 
             //Move toward target
             Chassis->Aim(power);

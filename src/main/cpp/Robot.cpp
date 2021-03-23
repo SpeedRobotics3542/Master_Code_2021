@@ -92,19 +92,6 @@ void Robot::TeleopPeriodic() {
 
   }
 
-//Hopper run on A button on Manipulator
-  if (Manipulator.GetAButton()==1)
-  {
-
-    Indexer->HopperRun(100);
-
-  } else {
-    
-
-    Indexer->HopperRun(0);
-
-  }
-
 //Holding System run on B Button on Manipulator
 if (Manipulator.GetBButton()==1)
 {
@@ -114,6 +101,18 @@ if (Manipulator.GetBButton()==1)
 } else {
 
   Indexer->HoldingSystemRun(0);
+
+}
+
+//Hopper and Holding system run 
+if (Manipulator.GetAButton()==1)
+{
+
+    Indexer->HopperHoldingSystemRun(100, 40);
+
+} else {
+
+    Indexer->HopperHoldingSystemRun(0, 0);
 
 }
 

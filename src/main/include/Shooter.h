@@ -2,6 +2,7 @@
 #define SHOOTER_H
 
 #include <rev/CANSparkMax.h>
+#include "frc/Servo.h"
 
 class Shooting
 {
@@ -28,7 +29,8 @@ class Shooting
     rev::CANPIDController MeteringWheelPIDController = MeteringWheel.GetPIDController();
 
 
-    // frc::Servo test {1};
+    frc::Servo hood1 {1};
+    frc::Servo hood2 {2};
 
     Shooting()
     {
@@ -103,7 +105,26 @@ class Shooting
 
     }
 
+    // input a percent value
+    // scale to the servo units
+    // run one forward and one backward
+    // run the servos at that value
+
+    bool runHood(double power)
+    {
+        
+        double servoPower = power / 100;
+
+        hood1.Set(servoPower);
+        hood2.Set(-servoPower);
+
+        return 1;
+
+    }
+
 };
+
+
 
 
 #endif
