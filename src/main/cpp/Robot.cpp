@@ -78,7 +78,7 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
 
-  Chassis->Drive(Driver.GetY(frc::XboxController::kLeftHand)*-1, Driver.GetY(frc::XboxController::kRightHand), .65);
+  Chassis->Drive(Driver.GetY(frc::XboxController::kLeftHand), Driver.GetY(frc::XboxController::kRightHand), .65);
   
   //Intake run on right bumper on manipulator 
   if (Manipulator.GetBumper(frc::XboxController::kRightHand)==1)
@@ -96,7 +96,7 @@ void Robot::TeleopPeriodic() {
   if (Manipulator.GetAButton()==1)
   {
 
-    Indexer->HopperRun(40);
+    Indexer->HopperRun(100);
 
   } else {
     

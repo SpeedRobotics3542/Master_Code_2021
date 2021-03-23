@@ -11,8 +11,8 @@ class Index
 private:
 
     bool BallStopPosition;
-    TalonSRX Hopper {0};
-    VictorSPX HoldingSystem {1};
+    TalonSRX Hopper {10};
+    VictorSPX HoldingSystem {8};
     frc::Solenoid BallStop {0};
 
 public:
