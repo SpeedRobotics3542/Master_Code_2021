@@ -40,6 +40,19 @@ void Robot::RobotPeriodic()
 
    Limelight->LimelightValues();
 
+   //smarts dashboard shooter speed, hood encoder, 
+   //shooter hood with servos (plugged into rio)
+   //unplug before running shooter
+   //use srs/srx programer thing for servos
+    //user manual in discord (put in continous mode)
+  //before plugging servos back in deploy with smart dashbord values for hood
+  //explore the range of encoder (plug in first)
+    //2 sets of wires(6 pin-6 pins) looks like motor controller plug in DONT USE
+    //pwm wire (3 pin plug into rio)
+      //4 sets of wire all have black and red (blue goes into 0, yellow goes into 1) DIO ports
+      // black goes to ground (point away from the center of the rio)   
+  // write down the range of values for the shooter hood (0-#)
+  // if the individual components work, finalise buttons
 }
 
 /**
