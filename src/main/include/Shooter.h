@@ -3,6 +3,8 @@
 
 #include <rev/CANSparkMax.h>
 #include "frc/Servo.h"
+#include "frc/PIDController.h"
+#include "frc/Encoder.h"
 
 class Shooting
 {
@@ -28,12 +30,25 @@ class Shooting
     rev::CANPIDController ShooterPIDController = Shooter1.GetPIDController();
     rev::CANPIDController MeteringWheelPIDController = MeteringWheel.GetPIDController();
 
-
+    // defining servos and the hood PID
     frc::Servo hood1 {1};
     frc::Servo hood2 {2};
 
+    double P = 0.1;
+    double I = 0;
+    double D = 0;
+    double HoodTolerance = 500;
+
+    frc2::PIDController HoodPID{P, I, D};
+
+    // Hood encoder
+     frc::Encoder HoodEncoder{0, 1};
+
     Shooting()
     {
+
+        //Setting the Hood Tolerance
+        HoodPID.SetTolerance (HoodTolerance, 10);
 
         //Setting Shooter PID Controller and Output range
         ShooterPIDController.SetP(.1);
@@ -103,6 +118,25 @@ class Shooting
 
         return 0;
 
+    }
+
+    // function that moves the hood based on the PID
+    // calculate the PID value
+    // pass that value to the servo function (runHood)
+
+    bool HoodMove (int ServoPosition = 0)
+    {
+        if(!HoodPID.AtSetpoint())
+        {
+            double HoodPower = HoodPID.Calculate(HoodEncoder.GetDistance(), ServoPosition);
+            runHood(HoodPower);
+            return 0;
+
+        } else {
+
+            return 1;
+
+        }
     }
 
     // input a percent value

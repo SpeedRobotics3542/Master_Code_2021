@@ -29,8 +29,11 @@ class Handler
 
         PigeonIMU *Pigeon = new PigeonIMU (1);
 
+        // toggle for shooter Error calculated
+        
+
     public:
-    
+    int ShooterCase = 0;
 
 Handler(DriveTrain* D, Intook* inny, Shooting* Shoot, Index* In, LimeLight* GreenLight)
 { 
@@ -56,6 +59,7 @@ double GetPigeonAngle()
 
 }
 
+//runs intake and indexer together
 void IntakeIndexer(bool activated)
 {
     if(activated == 1)
@@ -72,41 +76,33 @@ void IntakeIndexer(bool activated)
     }
 }
 
-void IndexShooterMetering(int Rpm = 100, bool activated = true)
+// checks to see if the Limelight sees a target and sets the error on the pigeon.
+// if 1: set pigeon to error angle
+// if 0: no Target!
+bool LimelightError()
 {
-    if(activated == 1)
+
+    if (Limelight->targetValid)
     {
 
-        Shooter->SetVelocity(Rpm);
-        Indexer->HoldingSystemRun(75);
-        Shooter->MeteringWheelRun(90);
-    
-    } else {
+        //Limelight angle of error = Pigeon 
+        Pigeon->SetFusedHeading(Limelight->targetOffsetAngle_Horizontal);
 
-        Shooter->SetVelocity(0);
-        Indexer->HoldingSystemRun(0);
-        Shooter->MeteringWheelRun(0);
+        return 1;
 
     }
 
-}
+        return 0;
 
+}
 
 //Connects Limelight, Drivetrain, and Pigeon to aim
 bool MasterAiming()
 {
-    
-
-    //Target is valid and within set range
-    if (Limelight->targetValid and (Limelight->targetOffsetAngle_Horizontal > PIDTolerance or 
-                                    Limelight->targetOffsetAngle_Horizontal < -PIDTolerance))
-    {
-        //Limelight angle of error = Pigeon 
-        Pigeon->SetFusedHeading(Limelight->targetOffsetAngle_Horizontal);
-        
+           
         //Aiming PID is not where you want  
         //Check setpoint and move robot    
-        while (!AimingPID.AtSetpoint())
+        if (!AimingPID.AtSetpoint())
         {
 
             //calculate PID output
@@ -115,18 +111,120 @@ bool MasterAiming()
             //Move toward target
             Chassis->Aim(power);
 
-        }
+            return 0;
 
-        //Return 1 if at setpoint
+        } else {
+
         return 1;
-
-    } else {
-
-        return 0;
 
     }
 
 }
+
+
+int CalcHoodPos()
+{
+
+// SOMETHING using limelight distance
+
+}
+
+// purpose: synchronize shooting sequence
+//          - move robot and set shooter speed
+//          - fire balls When step 1 is complete
+// inputs: N/A
+// outputs: N/A
+
+void ShootingSequence ()
+{
+
+   switch (ShooterCase)
+   {
+    case 0:
+
+        //Sets angle of error from limelight to the pigeon
+        //Allows the shooter to turn on and start the aiming process
+        if(LimelightError() == 1)
+
+        {
+
+            Shooter->SetVelocity(2000);
+            MasterAiming();
+            ShooterCase = 10;
+
+        }
+
+    break;
+    
+    case 10:
+
+    //Makes sure that the robot is lined up
+    if(MasterAiming() == 1)
+    {
+
+        ShooterCase = 20;
+
+    }
+
+    break;
+
+    case 20:
+
+        //Moves the Hood on the shooter according to position on the field
+        if(Shooter->HoodMove(CalcHoodPos()) == 1)
+        {
+
+            ShooterCase = 30;
+
+        }
+
+    break;
+
+    case 30:
+
+        //Double checks that previous conditions are still true
+        if(LimelightError() == 1 and MasterAiming() ==1 and Shooter->HoodMove(CalcHoodPos()) == 1)
+        {
+
+            //Shooter in range
+            //Holding system is on and ball stop allows balls to escape
+            if(Shooter->MeteringWheelRun(85) == 1)
+            {
+
+                Indexer->HoldingSystemRun(85);
+                
+                if(Indexer->GetBallStop() == 1)
+                {
+
+                    Indexer->FlipBallStop();
+
+                }  
+
+            } else {
+
+                //If not true then Holding system is off
+                //Ball stop is closed
+                Indexer->HoldingSystemRun(0);
+
+                if(Indexer->GetBallStop() == 0)
+                {
+
+                    Indexer->FlipBallStop();
+
+                }
+            }
+
+        }
+
+    break;
+   }
+
+
+
+
+
+}
+
 
 };
 
