@@ -71,6 +71,14 @@ class Shooting
         Shooter2.SetSmartCurrentLimit(5, 40);
         Shooter3.SetSmartCurrentLimit(5, 40);
 
+
+//------------------------------------OLIVIA LOOK HERE--------------------------------------
+        Shooter2.Follow(Shooter1);
+        Shooter3.Follow(Shooter1);
+        Shooter1.Set(rev::ControlType::kVelocity);
+
+// ---------------------------------------------------------------------------------------
+
     };
 
     // function name: SetVelocity
