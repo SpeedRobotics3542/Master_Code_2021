@@ -109,12 +109,18 @@ void Robot::TeleopPeriodic() {
 if (Manipulator.GetBButton()==1)
 {
 
-  Indexer->HoldingSystemRun(40);
+  Indexer->HoldingSystemRun(50);
 
 } else {
 
   Indexer->HoldingSystemRun(0);
 
+}
+if(Manipulator.GetYButton()==1)
+{
+  Indexer->HopperHoldingSystemRun(100, 50);
+} else {
+  Indexer->HopperHoldingSystemRun(0, 0);
 }
 
 //Shooter run on Left bumper on Manipulator

@@ -22,7 +22,11 @@ public:
     {
 
         BallStopPosition = true; //stopping ball
-        
+
+        //Setting Inversions
+        HoldingSystem.SetInverted(true);
+        HoldingSystem.ConfigFactoryDefault();
+
     };
 
     //Hopper control (Forward)
@@ -48,7 +52,7 @@ public:
     //Running Hopper and Holding System forward (Possibly at different powers)
     void HopperHoldingSystemRun(double PowerHopper = 0, double PowerHoldingSystem = 0)
     {
-
+        
         HopperRun(PowerHopper);
         HoldingSystemRun(PowerHoldingSystem);
 

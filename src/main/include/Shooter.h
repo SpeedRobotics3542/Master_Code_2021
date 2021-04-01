@@ -16,10 +16,10 @@ class Shooting
     //Defining and adressing Motors on shooter
     //Defining Encoders on shooter
     //Creating PID controller for shooter
-    rev::CANSparkMax Shooter1 = rev::CANSparkMax(0, rev::CANSparkMax::MotorType::kBrushless);
-    rev::CANSparkMax Shooter2 = rev::CANSparkMax(1, rev::CANSparkMax::MotorType::kBrushless);
-    rev::CANSparkMax Shooter3 = rev::CANSparkMax(2, rev::CANSparkMax::MotorType::kBrushless);
-    rev::CANSparkMax MeteringWheel = rev::CANSparkMax(3, rev::CANSparkMax::MotorType::kBrushless);
+    rev::CANSparkMax Shooter1 = rev::CANSparkMax(4, rev::CANSparkMax::MotorType::kBrushless);
+    rev::CANSparkMax Shooter2 = rev::CANSparkMax(5, rev::CANSparkMax::MotorType::kBrushless);
+    rev::CANSparkMax Shooter3 = rev::CANSparkMax(6, rev::CANSparkMax::MotorType::kBrushless);
+    rev::CANSparkMax MeteringWheel = rev::CANSparkMax(11, rev::CANSparkMax::MotorType::kBrushless);
     rev::CANEncoder Shooter1Encoder = Shooter1.GetEncoder();
     rev::CANEncoder Shooter2Encoder = Shooter2.GetEncoder();
     rev::CANEncoder Shooter3Encoder = Shooter3.GetEncoder();
@@ -61,8 +61,10 @@ class Shooting
     // purpose: set veloity of the shooter motors
     bool SetVelocity(int target)
     {
+        
+        //ShooterVelocity = target;
 
-        ShooterVelocity = target;
+        Shooter1.Set(rev::ControlType::kVelocity);
         ShooterPIDController.SetReference(target, rev::ControlType::kVelocity);
         return 1;
 
@@ -81,6 +83,7 @@ class Shooting
     bool MeteringWheelRun(double MeteringWheelVelocity = 0)
     {
 
+        MeteringWheel.Set(rev::ControlType::kVelocity);
         //Velocity range for shooter to turn on Metering Wheel      
         if((ShooterVelocity * .95) <= Shooter1Encoder.GetVelocity() and 
             (ShooterVelocity * 1.05) >= Shooter1Encoder.GetVelocity())
