@@ -77,6 +77,8 @@ class Shooting
         Shooter3.Follow(Shooter1);
         Shooter1.Set(rev::ControlType::kVelocity);
 
+        MeteringWheel.Set(rev::ControlType::kVelocity);
+
 // ---------------------------------------------------------------------------------------
 
     };
