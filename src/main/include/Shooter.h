@@ -19,10 +19,10 @@ class Shooting
     //Defining and adressing Motors on shooter
     //Defining Encoders on shooter
     //Creating PID controller for shooter
-    rev::CANSparkMax Shooter1 = rev::CANSparkMax(0, rev::CANSparkMax::MotorType::kBrushless);
-    rev::CANSparkMax Shooter2 = rev::CANSparkMax(1, rev::CANSparkMax::MotorType::kBrushless);
-    rev::CANSparkMax Shooter3 = rev::CANSparkMax(2, rev::CANSparkMax::MotorType::kBrushless);
-    rev::CANSparkMax MeteringWheel = rev::CANSparkMax(3, rev::CANSparkMax::MotorType::kBrushless);
+    rev::CANSparkMax Shooter1 {0, rev::CANSparkMax::MotorType::kBrushless};
+    rev::CANSparkMax Shooter2 {1, rev::CANSparkMax::MotorType::kBrushless};
+    rev::CANSparkMax Shooter3 {2, rev::CANSparkMax::MotorType::kBrushless};
+    rev::CANSparkMax MeteringWheel {3, rev::CANSparkMax::MotorType::kBrushless};
     rev::CANEncoder Shooter1Encoder = Shooter1.GetEncoder();
     rev::CANEncoder Shooter2Encoder = Shooter2.GetEncoder();
     rev::CANEncoder Shooter3Encoder = Shooter3.GetEncoder();
@@ -72,14 +72,14 @@ class Shooting
         Shooter3.SetSmartCurrentLimit(5, 40);
 
 
-//------------------------------------OLIVIA LOOK HERE--------------------------------------
-        Shooter2.Follow(Shooter1);
-        Shooter3.Follow(Shooter1);
-        Shooter1.Set(rev::ControlType::kVelocity);
+// //------------------------------------OLIVIA LOOK HERE--------------------------------------
+//         Shooter2.Follow(Shooter1);
+//         Shooter3.Follow(Shooter1);
+//         Shooter1.Set(rev::ControlType::kVelocity);
 
-        MeteringWheel.Set(rev::ControlType::kVelocity);
+//         MeteringWheel.Set(rev::ControlType::kVelocity);
 
-// ---------------------------------------------------------------------------------------
+// // ---------------------------------------------------------------------------------------
 
     };
 
