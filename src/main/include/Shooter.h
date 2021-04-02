@@ -5,6 +5,7 @@
 #include "frc/Servo.h"
 #include "frc/PIDController.h"
 #include "frc/Encoder.h"
+#include "frc/smartdashboard/Smartdashboard.h"
 
 class Shooting
 {
@@ -19,10 +20,12 @@ class Shooting
     //Defining and adressing Motors on shooter
     //Defining Encoders on shooter
     //Creating PID controller for shooter
-    rev::CANSparkMax Shooter1 {0, rev::CANSparkMax::MotorType::kBrushless};
-    rev::CANSparkMax Shooter2 {1, rev::CANSparkMax::MotorType::kBrushless};
-    rev::CANSparkMax Shooter3 {2, rev::CANSparkMax::MotorType::kBrushless};
-    rev::CANSparkMax MeteringWheel {3, rev::CANSparkMax::MotorType::kBrushless};
+
+    // are these addresses correct????
+    rev::CANSparkMax Shooter1 {4, rev::CANSparkMax::MotorType::kBrushless};
+    rev::CANSparkMax Shooter2 {5, rev::CANSparkMax::MotorType::kBrushless};
+    rev::CANSparkMax Shooter3 {6, rev::CANSparkMax::MotorType::kBrushless};
+    rev::CANSparkMax MeteringWheel {11, rev::CANSparkMax::MotorType::kBrushless};
     rev::CANEncoder Shooter1Encoder = Shooter1.GetEncoder();
     rev::CANEncoder Shooter2Encoder = Shooter2.GetEncoder();
     rev::CANEncoder Shooter3Encoder = Shooter3.GetEncoder();
@@ -41,20 +44,35 @@ class Shooting
 
     frc2::PIDController HoodPID{P, I, D};
 
+
     // Hood encoder
      frc::Encoder HoodEncoder{0, 1};
 
     Shooting()
     {
 
+        Shooter1.RestoreFactoryDefaults();
+        Shooter2.RestoreFactoryDefaults();
+        Shooter3.RestoreFactoryDefaults();
+        MeteringWheel.RestoreFactoryDefaults();
+
+        Shooter1.SetInverted(true);
+
         //Setting the Hood Tolerance
         HoodPID.SetTolerance (HoodTolerance, 10);
 
         //Setting Shooter PID Controller and Output range
-        ShooterPIDController.SetP(.1);
-        ShooterPIDController.SetI(0);
+        ShooterPIDController.SetP(1000);
+        ShooterPIDController.SetI(.5);
         ShooterPIDController.SetD(0);
-        ShooterPIDController.SetOutputRange(-.05, 1);
+        ShooterPIDController.SetFF(.1);
+
+        MeteringWheelPIDController.SetP(.000025);
+        MeteringWheelPIDController.SetI(.000000395);
+        MeteringWheelPIDController.SetD(.000001);
+
+        ShooterPIDController.SetOutputRange(-1, 1);
+        MeteringWheelPIDController.SetOutputRange(-1, 1);
 
         //Setting Ramp rate
         Shooter1.SetClosedLoopRampRate(1);
@@ -70,6 +88,8 @@ class Shooting
         Shooter1.SetSmartCurrentLimit(5, 40);
         Shooter2.SetSmartCurrentLimit(5, 40);
         Shooter3.SetSmartCurrentLimit(5, 40);
+
+        MeteringWheel.SetSmartCurrentLimit(5, 30);
 
 
 // //------------------------------------OLIVIA LOOK HERE--------------------------------------
@@ -90,8 +110,19 @@ class Shooting
     {
 
         ShooterVelocity = target;
+        if(target == 0)
+        {
+            
+            Shooter1.Set(0);
+            
+        } else {
+        
         ShooterPIDController.SetReference(target, rev::ControlType::kVelocity);
+        frc::SmartDashboard::PutNumber("Shooter Velocity", Shooter1Encoder.GetVelocity());
         return 1;
+
+        }
+
 
     }
 
@@ -109,24 +140,28 @@ class Shooting
     {
 
         //Velocity range for shooter to turn on Metering Wheel      
-        if((ShooterVelocity * .95) <= Shooter1Encoder.GetVelocity() and 
-            (ShooterVelocity * 1.05) >= Shooter1Encoder.GetVelocity())
-        {
+        //if((ShooterVelocity * .95) <= Shooter1Encoder.GetVelocity() and 
+          //  (ShooterVelocity * 1.05) >= Shooter1Encoder.GetVelocity())
+        //{
 
             MeteringWheelPIDController.SetReference(MeteringWheelVelocity, rev::ControlType::kVelocity);
-            return 1;
 
-        }
+            frc::SmartDashboard::PutNumber("set point", MeteringWheelVelocity);
+            //MeteringWheel.Set(.5);
+            
+            //return 1;
+
+        //}
 
         //Metering wheel turns off if condition is not true
-        else
-        {
+        //else
+        //{
 
-            MeteringWheel.Set(0);
+            //MeteringWheel.Set(0);
 
-        }
+        //}
 
-        return 0;
+        //return 0;
 
     }
 

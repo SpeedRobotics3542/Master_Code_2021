@@ -22,6 +22,8 @@ public:
     {
 
         BallStopPosition = true; //stopping ball
+        HoldingSystem.ConfigFactoryDefault();
+        HoldingSystem.SetInverted(true);
         
     };
 

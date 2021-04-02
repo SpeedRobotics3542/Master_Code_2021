@@ -133,7 +133,7 @@ if (Manipulator.GetAButton()==1)
 if (Manipulator.GetBumper(frc::XboxController::kLeftHand)==1)
 {
 
-  Shooter->SetVelocity(2300);
+  Shooter->SetVelocity(300);
 
 } else {
 
@@ -145,12 +145,12 @@ if (Manipulator.GetBumper(frc::XboxController::kLeftHand)==1)
 if(Manipulator.GetXButton()==1)
 {
 
-  Shooter->SetVelocity(0);
-  Shooter->MeteringWheelRun(50);
+  //Shooter->SetVelocity(0);
+  Shooter->MeteringWheelRun(500);
 
 } else {
 
-  Shooter->SetVelocity(0);
+  //Shooter->SetVelocity(0);
   Shooter->MeteringWheelRun(0);
   
 }
