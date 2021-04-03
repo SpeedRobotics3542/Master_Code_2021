@@ -109,14 +109,19 @@ void Robot::TeleopPeriodic() {
 if (Manipulator.GetBButton()==1)
 {
 
-  Indexer->HoldingSystemRun(40);
+  Shooter->runHood(50);
 
-} else {
+} else if (Manipulator.GetYButton()==1){
 
-  Indexer->HoldingSystemRun(0);
+  Shooter->runHood(-50);
+
+}else {
+
+  Shooter->runHood(0);
 
 }
 
+frc::SmartDashboard::PutNumber("encoder value",Shooter->HoodEncoder.GetDistance());
 //Hopper and Holding system run 
 if (Manipulator.GetAButton()==1)
 {
@@ -139,7 +144,7 @@ if (Manipulator.GetAButton()==1)
   frc::SmartDashboard::PutNumber("speed", Shooter->Shooter1Encoder.GetVelocity());
   frc::SmartDashboard::PutNumber("trigger",Manipulator.GetTriggerAxis(frc::XboxController::kLeftHand));
 
-
+ 
 
 
 

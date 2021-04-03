@@ -36,8 +36,8 @@ class Shooting
     rev::CANPIDController MeteringWheelPIDController = MeteringWheel.GetPIDController();
 
     // defining servos and the hood PID
-    frc::Servo hood1 {1};
-    frc::Servo hood2 {2};
+    frc::Servo hood1 {2};
+    frc::Servo hood2 {3};
 
     double P = 0.1;
     double I = 0;
@@ -210,9 +210,15 @@ class Shooting
     {
         
         double servoPower = power / 100;
+        servoPower = servoPower + 1.0;
+        servoPower = servoPower / 2;
+
+        double servoPower2 = -power / 100;
+        servoPower2 = servoPower2 + 1.0;
+        servoPower2 = servoPower2 / 2;
 
         hood1.Set(servoPower);
-        hood2.Set(-servoPower);
+        hood2.Set(servoPower2);
 
         return 1;
 
