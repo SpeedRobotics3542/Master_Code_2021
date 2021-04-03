@@ -129,24 +129,26 @@ if (Manipulator.GetAButton()==1)
 
 }
 
-//Shooter run on Left bumper on Manipulator
-if (Manipulator.GetBumper(frc::XboxController::kLeftHand)==1)
-{
+  double speed = Manipulator.GetTriggerAxis(frc::XboxController::kLeftHand);
+  if (speed > .8){
+    speed = .8;
+  }
+  Shooter->Shooter1.Set(speed);
+  Shooter->Shooter2.Set(speed);
+  Shooter->Shooter3.Set(speed);
+  frc::SmartDashboard::PutNumber("speed", Shooter->Shooter1Encoder.GetVelocity());
+  frc::SmartDashboard::PutNumber("trigger",Manipulator.GetTriggerAxis(frc::XboxController::kLeftHand));
 
-  Shooter->SetVelocity(300);
 
-} else {
 
-  Shooter->SetVelocity(0);
 
-}
 
 //Metering Wheel run on X button on Manipulator
 if(Manipulator.GetXButton()==1)
 {
 
   //Shooter->SetVelocity(0);
-  Shooter->MeteringWheelRun(500);
+  Shooter->MeteringWheelRun(10000);
 
 } else {
 

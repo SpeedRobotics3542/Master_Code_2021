@@ -31,6 +31,8 @@ class Shooting
     rev::CANEncoder Shooter3Encoder = Shooter3.GetEncoder();
     rev::CANEncoder MeteringWheelEncoder = MeteringWheel.GetEncoder();
     rev::CANPIDController ShooterPIDController = Shooter1.GetPIDController();
+    rev::CANPIDController ShooterPIDController2 = Shooter2.GetPIDController();
+    rev::CANPIDController ShooterPIDController3 = Shooter3.GetPIDController();
     rev::CANPIDController MeteringWheelPIDController = MeteringWheel.GetPIDController();
 
     // defining servos and the hood PID
@@ -57,15 +59,27 @@ class Shooting
         MeteringWheel.RestoreFactoryDefaults();
 
         Shooter1.SetInverted(true);
+        Shooter2.SetInverted(true);
+        Shooter3.SetInverted(true);
 
         //Setting the Hood Tolerance
         HoodPID.SetTolerance (HoodTolerance, 10);
 
         //Setting Shooter PID Controller and Output range
-        ShooterPIDController.SetP(1000);
-        ShooterPIDController.SetI(.5);
+        ShooterPIDController.SetP(.005);
+        ShooterPIDController.SetI(0);
         ShooterPIDController.SetD(0);
-        ShooterPIDController.SetFF(.1);
+        ShooterPIDController.SetFF(0);
+
+        ShooterPIDController2.SetP(.005);
+        ShooterPIDController2.SetI(0);
+        ShooterPIDController2.SetD(0);
+        ShooterPIDController2.SetFF(0);
+
+        ShooterPIDController3.SetP(.005);
+        ShooterPIDController3.SetI(0);
+        ShooterPIDController3.SetD(0);
+        ShooterPIDController3.SetFF(0);
 
         MeteringWheelPIDController.SetP(.000025);
         MeteringWheelPIDController.SetI(.000000395);
@@ -74,6 +88,7 @@ class Shooting
         ShooterPIDController.SetOutputRange(-1, 1);
         MeteringWheelPIDController.SetOutputRange(-1, 1);
 
+
         //Setting Ramp rate
         Shooter1.SetClosedLoopRampRate(1);
         Shooter2.SetClosedLoopRampRate(1);
@@ -81,13 +96,15 @@ class Shooting
         MeteringWheel.SetClosedLoopRampRate(.25);
 
         //Setting motors 2 & 3 to follow motor 1
-        Shooter2.Follow(Shooter1);
-        Shooter3.Follow(Shooter1);
+        // Shooter2.Follow(Shooter1);
+        // Shooter3.Follow(Shooter1);
 
         //Setting Current limits
-        Shooter1.SetSmartCurrentLimit(5, 40);
-        Shooter2.SetSmartCurrentLimit(5, 40);
-        Shooter3.SetSmartCurrentLimit(5, 40);
+        Shooter1.SetSmartCurrentLimit(500, 400);
+        Shooter2.SetSmartCurrentLimit(500, 400);
+        Shooter3.SetSmartCurrentLimit(500, 400);
+
+      
 
         MeteringWheel.SetSmartCurrentLimit(5, 30);
 
